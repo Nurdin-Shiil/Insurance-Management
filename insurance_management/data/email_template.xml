@@ -1,0 +1,108 @@
+<odoo>
+
+
+    <data>
+        <record id="email_template_policy_renewal_reminder" model="mail.template">
+            <field name="name">Policy Renewal Reminder</field>
+            <field name="model_id" ref="insurance_management.model_insurance_policy" />
+            <field name="subject">Your policy {{ object.name }} is due for renewal</field>
+            <field name="email_to">{{object.partner_id.email or '' }}</field>
+            <field name="body_html" type="html">
+
+                <p>Dear <t t-out="object.partner_id.name"></t>,</p>
+                <p>This is a reminder that your insurance policy <strong>
+                        <t t-out="object.name"></t>
+                    </strong> will expire on <strong>
+                        <t t-out="object.end_date"></t>
+                    </strong>.</p>
+                <p>Please get in touch with us if you wish to renew it.</p>
+                <p>Best regards</p>
+            </field>
+        </record>
+
+        <record id="email_template_quote_request" model="mail.template">
+            <field name="name">Quote Request</field>
+            <field name="model_id" ref="insurance_management.model_lead_quote" />
+            <field name="subject"> Quote Request</field>
+            <field name="email_from">{{object.lead_id.bd_handler_id.email}}</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="body_html" type="html">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h4> Dear <t t-out="object.partner_id.name" />, </h4>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <p> We kindly request your quote for the opportunity <strong>
+                        <t t-out="object.lead_id.name" />
+                    </strong>. Please
+                    submit your quote using the following link: </p>
+                <p>
+                    <a t-att-href="ctx.get('portal_link')">
+                        Submit Quote
+                    </a>
+                </p>
+                <p>
+                    The risk note document is attached for your reference. Please review it
+                    carefully before
+                    submitting your quote.
+                </p>
+                <hr />
+                <p> If you have any questions, contact us at <t
+                        t-out="object.lead_id.bd_handler_id.email" /> or reply to this email. </p>
+                <p>
+                    Thank you for your participation.
+                </p>
+                <h5> Regards, <br />
+                    <t t-out="object.lead_id.bd_handler_id.name" />
+                </h5>
+            </field>
+            <field name="auto_delete" eval="True" />
+        </record>
+
+
+        <record id="email_template_quote_request" model="mail.template">
+            <field name="name">Quote Request</field>
+            <field name="model_id" ref="insurance_management.model_lead_quote" />
+            <field name="subject"> Quote Request</field>
+            <field name="email_from">{{object.lead_id.bd_handler_id.email}}</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="body_html" type="html">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h4> Dear <t t-out="object.partner_id.name" />, </h4>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <p> We kindly request your quote for the opportunity <strong>
+                        <t t-out="object.lead_id.name" />
+                    </strong>. Please
+                    submit your quote using the following link: </p>
+                <p>
+                    <a t-att-href="ctx.get('portal_link')">
+                        Submit Quote
+                    </a>
+                </p>
+                <p>
+                    The risk note document is attached for your reference. Please review it
+                    carefully before
+                    submitting your quote.
+                </p>
+                <hr />
+                <p> If you have any questions, contact us at <t
+                        t-out="object.lead_id.bd_handler_id.email" /> or reply to this email. </p>
+                <p>
+                    Thank you for your participation.
+                </p>
+                <h5> Regards, <br />
+                    <t t-out="object.lead_id.bd_handler_id.name" />
+                </h5>
+            </field>
+            <field name="auto_delete" eval="True" />
+        </record>
+    </data>
+</odoo>

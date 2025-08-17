@@ -1,0 +1,239 @@
+<odoo>
+    <!-- Define the action first to ensure it's available before the view -->
+    <record id="action_insurance_policy_invoices" model="ir.actions.act_window">
+        <field name="name">Policy Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('insurance_policy_id', '=', active_id)]</field>
+        <field name="context">{'default_insurance_policy_id': active_id}</field>
+    </record>
+
+    <record id="action_insurance_policy_cr_report" model="ir.actions.act_window">
+        <field name="name">CR Report</field>
+        <field name="res_model">insurance.policy.cr.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="view_insurance_policy_invoices_list" model="ir.ui.view">
+        <field name="name">insurance.policy.invoices.list</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" string="Invoice Number" />
+                <field name="move_type" string="Type" />
+                <field name="invoice_date" string="Date" />
+                <field name="amount_total" string="Total" />
+                <field name="payment_state" string="Payment Status" />
+                <field name="partner_id" string="Customer" />
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_insurance_policy_form" model="ir.ui.view">
+        <field name="name">insurance.policy.form</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <form string="Policy">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm Policy"
+                        class="btn-primary"
+                        invisible="payment_type == 'broker' or state == 'active'" />
+                    <button name="action_create_invoice" type="object" string="Create Invoice"
+                        class="btn-secondary"
+                        invisible="payment_type == 'underwriter'" />
+                    <button name="action_import_members" type="object" string="Import Members"
+                        class="btn-secondary" />
+                    <button string="Invoices"
+                        name="%(insurance_management.action_insurance_policy_invoices)d"
+                        type="action"
+                        class="btn-secondary"
+                        context="{'default_insurance_policy_id': id}" />
+                    <button string="Create Claim" name="action_claim" type="object"
+                        class="oe_highlight" />
+                    <field name="state" widget="statusbar" />
+                    <button name="action_create_cr_report"
+                        type="object"
+                        string="CR Report"
+                        class="btn-secondary" />
+                    <button name="action_view_commissions" type="object" string="Commissions"
+                        class="btn-secondary" icon="fa-money" />
+
+
+                    <button name="action_view_masterlist" type="object" string="View Masterlist"
+                        class="btn-secondary" />
+
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                            <field name="insurer_id" />
+                            <field name="commission_plan_id" />
+                        </group>
+                        <group>
+                            <field name="rate_table_id" domain="[('insurer_id', '=', insurer_id)]" />
+                            <field name="payment_type" />
+                            <field name="active_date" />
+                            <field name="policy_frequency" />
+                            <field name="policy_duration_months"
+                                invisible="policy_frequency !='monthly'" />
+                            <field name="end_date" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Members">
+                            <field name="member_ids">
+                                <list editable="bottom">
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="state" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Deletions">
+                            <field name="deleted_ids" options="{'no_create': True, 'no_edit': True}">
+                                <list>
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="deletion_date" readonly="1" />
+                                    <field name="state" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_insurance_policy_member_form" model="ir.ui.view">
+        <field name="name">insurance.policy.member.form</field>
+        <field name="model">insurance.policy.member</field>
+        <field name="arch" type="xml">
+            <form string="Policy Member">
+                <header>
+                    <button
+                        type="object"
+                        name="action_view_activities"
+                        string="Activities"
+                        class="btn-secondary" />
+                </header>
+                <group>
+                    <group>
+                        <field name="name" />
+                        <field name="principal_member_id"
+                            domain="[('policy_id', '=', policy_id), ('id', '!=', id)]" />
+                        <field name="relation_type" />
+                        <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                        <field name="id_no" />
+                        <field name="email" />
+                        <field name="phone" />
+                        <field name="age" />
+                        <field name="dependent_count" readonly="1" />
+                    </group>
+                    <group>
+                        <field name="band_label" readonly="principal_member_id != False"
+                            invisible="principal_member_id != False" />
+                        <field name="premium" readonly="1" />
+                        <field name="currency_id" invisible="1" />
+                        <field name="state" />
+                        <field name="policy_id" invisible="state == 'deleted'" />
+                        <field name="deleted_policy_id" invisible="state != 'deleted'" />
+                        <field name="deletion_date" invisible="state != 'deleted'" readonly="1" />
+                        <field name="activation_date" invisible="state == 'pending'" />
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Invoice Lines">
+                        <field name="invoice_line_ids" readonly="1">
+                            <list>
+                                <field name="move_id" />
+                                <field name="name" />
+                                <field name="quantity" />
+                                <field name="price_unit" />
+                                <field name="account_id" />
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Dependents" invisible="principal_member_id != False">
+                        <field name="linked_dependent_ids">
+                            <list editable="bottom">
+                                <field name="name" />
+                                <field name="relation_type" />
+                                <field name="age" />
+                                <field name="state" />
+                                <field name="premium" readonly="1" />
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Policy Commission List View -->
+    <record id="view_insurance_policy_commission_list" model="ir.ui.view">
+        <field name="name">insurance.policy.commission.list</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="insurer_id" />
+                <field name="total_commission" />
+                <button name="action_achievement_detail" title="Achievements" type="object"
+                    icon="fa-list" help="See associated achievements" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Commission Action -->
+    <record id="action_insurance_commission" model="ir.actions.act_window">
+        <field name="name">Commissions</field>
+        <field name="res_model">insurance.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="insurance_management.view_insurance_policy_commission_list" />
+    </record>
+
+
+    <record id="view_insurance_policy_list" model="ir.ui.view">
+        <field name="name">insurance.policy.list</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="insurer_id" />
+                <field name="state" />
+                <field name="active_date" />
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_insurance_policy" model="ir.actions.act_window">
+        <field name="name">Policies</field>
+        <field name="res_model">insurance.policy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+</odoo>

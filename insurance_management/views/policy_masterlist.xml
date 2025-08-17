@@ -1,0 +1,151 @@
+<odoo>
+    <!-- Masterlist Form View -->
+    <record id="view_insurance_policy_masterlist_form" model="ir.ui.view">
+        <field name="name">insurance.policy.masterlist.form</field>
+        <field name="model">insurance.policy.masterlist</field>
+        <field name="arch" type="xml">
+            <form string="Policy Masterlist">
+                <header>
+                    <!-- <button name="action_export_excel" string="Export Initial Members"
+                    type="object"
+                        class="btn-secondary" context="{'category': 'initial'}" />
+                    <button name="action_export_excel" string="Export Additions" type="object"
+                        class="btn-secondary" context="{'category': 'additions'}" />
+                    <button name="action_export_excel" string="Export Deletions" type="object"
+                        class="btn-secondary" context="{'category': 'deletions'}" />
+                    <button name="action_export_excel" string="Export Active Members" type="object"
+                        class="btn-secondary" context="{'category': 'active'}" /> -->
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1" />
+                        <field name="policy_id" readonly="1" />
+                    </group>
+                    <notebook>
+                        <page string="Initial Members">
+                            <field name="initial_member_ids" readonly="1">
+                                <list>
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="state" />
+                                    <field name="activation_date" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Additions">
+                            <field name="addition_member_ids" readonly="1">
+                                <list>
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="state" />
+                                    <field name="activation_date" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Deletions">
+                            <field name="deletion_member_ids" readonly="1">
+                                <list>
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="state" />
+                                    <field name="deletion_date" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Active Members">
+                            <field name="active_member_ids" readonly="1">
+                                <list>
+                                    <field name="principal_member_id" />
+                                    <field name="relation_type" />
+                                    <field name="name" />
+                                    <field name="partner_id" domain="[('is_insurer', '=', False)]" />
+                                    <field name="id_no" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="age" />
+                                    <field name="band_label" readonly="principal_member_id != False" />
+                                    <field name="premium" readonly="1" />
+                                    <field name="state" />
+                                    <field name="activation_date" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to Open Masterlist -->
+    <record id="action_insurance_policy_masterlist" model="ir.actions.act_window">
+        <field name="name">Policy Masterlist</field>
+        <field name="res_model">insurance.policy.masterlist</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="export_initial_members_action" model="ir.actions.server">
+        <field name="name">Export Initial Members</field>
+        <field name="model_id" ref="model_insurance_policy_masterlist" />
+        <field name="binding_model_id" ref="model_insurance_policy_masterlist" />
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_export_excel(category='initial')
+        </field>
+    </record>
+
+    <record id="export_additions_action" model="ir.actions.server">
+        <field name="name">Export Additions</field>
+        <field name="model_id" ref="model_insurance_policy_masterlist" />
+        <field name="binding_model_id" ref="model_insurance_policy_masterlist" />
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_export_excel(category='additions')
+        </field>
+    </record>
+
+    <record id="export_deletions_action" model="ir.actions.server">
+        <field name="name">Export Deletions</field>
+        <field name="model_id" ref="model_insurance_policy_masterlist" />
+        <field name="binding_model_id" ref="model_insurance_policy_masterlist" />
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_export_excel(category='deletions')
+        </field>
+    </record>
+
+    <record id="export_active_members_action" model="ir.actions.server">
+        <field name="name">Export Active Members</field>
+        <field name="model_id" ref="model_insurance_policy_masterlist" />
+        <field name="binding_model_id" ref="model_insurance_policy_masterlist" />
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_export_excel(category='active')
+        </field>
+    </record>
+
+</odoo>

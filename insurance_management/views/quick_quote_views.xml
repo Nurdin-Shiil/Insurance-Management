@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_insurance_quick_quote_form" model="ir.ui.view">
+        <field name="name">insurance.quick.quote.form</field>
+        <field name="model">insurance.quick.quote</field>
+        <field name="arch" type="xml">
+            <form string="Quick Quote">
+                <sheet>
+                    <group>
+                        <field name="lead_id"/>
+                        <field name="insurer_id"/>
+                        <field name="dependent_count"/>
+                    </group>
+                    <group>
+                        <field name="inpatient_premium"/>
+                        <field name="outpatient_premium"/>
+                        <field name="total_premium"/>
+                    </group>
+                    <footer>
+                        <button string="Print Quote" type="object" name="action_print_quote" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

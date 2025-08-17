@@ -1,0 +1,11 @@
+<odoo>
+    <record id="ir_cron_policy_renewal_reminder" model="ir.cron">
+        <field name="name">Send Policy Renewal Reminders</field>
+        <field name="model_id" ref="insurance_management.model_insurance_policy" />
+        <field name="state">code</field>
+        <field name="code">model._send_policy_renewal_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+
+    </record>
+</odoo>

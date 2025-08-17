@@ -1,0 +1,99 @@
+<odoo>
+    <!-- Commission Plan Form View -->
+    <record id="view_insurance_commission_plan_form" model="ir.ui.view">
+        <field name="name">insurance.commission.plan.form</field>
+        <field name="model">insurance.commission.plan</field>
+        <field name="arch" type="xml">
+            <form string="Commission Plan">
+                <header>
+                    <button name="action_view_policies" type="object" string="View Policies"
+                        class="btn-secondary" icon="fa-list" />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="commission_rate" widget="percentage" />
+                        <field name="policy_count" readonly="1" />
+                    </group>
+                    <notebook>
+                        <page string="Policies">
+                            <field name="policy_ids" readonly="1">
+                                <list>
+                                    <field name="name" />
+                                    <field name="insurer_id" />
+                                    <field name="state" />
+                                    <field name="total_commission" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Commission Plan List View -->
+    <record id="view_insurance_commission_plan_list" model="ir.ui.view">
+        <field name="name">insurance.commission.plan.list</field>
+        <field name="model">insurance.commission.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="commission_rate" widget="percentage" />
+                <field name="policy_count" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Commission Plan Action -->
+    <record id="action_insurance_commission_plan" model="ir.actions.act_window">
+        <field name="name">Commission Plans</field>
+        <field name="res_model">insurance.commission.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Commission List View -->
+    <record id="view_insurance_commission_list" model="ir.ui.view">
+        <field name="name">insurance.commission.list</field>
+        <field name="model">insurance.commission</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="commission_plan_id" />
+                <field name="policy_id" />
+                <field name="commission_date" />
+                <field name="commission_amount" />
+                <field name="currency_id" invisible="1" />
+                <field name="invoice_id" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Commission Form View -->
+    <record id="view_insurance_commission_form" model="ir.ui.view">
+        <field name="name">insurance.commission.form</field>
+        <field name="model">insurance.commission</field>
+        <field name="arch" type="xml">
+            <form string="Commission">
+                <sheet>
+                    <group>
+                        <field name="commission_plan_id" />
+                        <field name="policy_id" />
+                        <field name="invoice_id" />
+                        <field name="commission_date" />
+                        <field name="commission_amount" />
+                        <field name="currency_id" invisible="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_insurance_commissions" name="Commissions" parent="menu_insurance_root"
+        sequence="20" />
+    <menuitem id="menu_insurance_commission_plan" name="Commission Plans"
+        parent="menu_insurance_commissions"
+        action="action_insurance_commission_plan" />
+    <menuitem id="menu_insurance_commission" name="Commissions" parent="menu_insurance_commissions"
+        action="action_insurance_commission" />
+</odoo>

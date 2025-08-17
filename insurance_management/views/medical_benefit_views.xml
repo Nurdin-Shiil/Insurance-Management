@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="benefit_view_form" model="ir.ui.view">
+        <field name="name">benefit.view.form</field>
+        <field name="model">benefit</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1" />
+                            <field name="rate_table_id" />
+                        </group>
+                        <group>
+                            <field name="special_exclusion" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="benefits" string="Benefits">
+                            <field name="benefit_line_ids">
+                                <list>
+                                    <field name="benefit_id" column_invisible="1" />
+                                    <field name="benefit" required="1" />
+                                    <field name="benefit_limit" />
+                                    <field name="scope" />
+                                    <field name="type" />
+                                    <field name="admin" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="benefit_line_view_form" model="ir.ui.view">
+        <field name="name">benefit.line.view.form</field>
+        <field name="model">benefit.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="benefit_id" invisible="1" />
+                        <field name="benefit" required="1" />
+                        <field name="benefit_limit" />
+                        <field name="scope" />
+                        <field name="type" />
+                        <field name="admin" />
+                    </group>
+                    <notebook>
+                        <page name="benefits" string="Benefits">
+                            <field name="benefit_scope_ids">
+                                <list editable="bottom">
+                                    <field name="name" required="1" />
+                                    <field name="limit" required="1" />
+                                    <field name="scope" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="medical_benefit_view_tree" model="ir.ui.view">
+        <field name="name">benefit.view.tree</field>
+        <field name="model">benefit</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+            </list>
+        </field>
+    </record>
+
+    <record id="benefit_scope_view_form" model="ir.ui.view">
+        <field name="name">benefit.scope.view.form</field>
+        <field name="model">benefit.scope</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="benefit_line_id"
+                            invisible="1"
+                        />
+                        <field name="name" required="1" />
+                        <field name="scope" required="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="benefit_scope_view_tree" model="ir.ui.view">
+        <field name="name">benefit.scope.view.list</field>
+        <field name="model">benefit.scope</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="benefit_line_id"
+                    column_invisible="1"
+                />
+                <field name="name" required="1" />
+                <field name="scope" required="1" />
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <record id="medical_benefit_action" model="ir.actions.act_window">
+        <field name="name">Medical Benefits</field>
+        <field name="res_model">benefit</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No benefit structure created. Let's add one!
+            </p>
+
+        </field>
+    </record>
+
+    <menuitem
+        id="benefit_menu_"
+        name="Medical Benefits"
+        action="medical_benefit_action"
+        parent="crm.crm_menu_config"
+        sequence="40" />
+
+</odoo>

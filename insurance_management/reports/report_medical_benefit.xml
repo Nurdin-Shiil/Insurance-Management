@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_medical_benefits">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <p class='text-center'>
+                            <u>Medical Benefits Summary</u>
+                        </p>
+                        <p>The overall benefit limits are as detailed in the table below;</p>
+                        <table class="table table-sm o_main_table mt-4">
+                            <tr>
+                                <td style="padding: 2px; color:white; background-color: #1A2A44;">Client
+                                    Name
+                                </td>
+                                <td>
+                                    <span
+                                        t-field="o.partner_id.name" />
+                                </td>
+                            </tr>
+                            <tr t-if="o.underwriter_id">
+                                <td style="padding: 2px; color: white; background-color: #1A2A44;">
+                                    Underwriter
+                                </td>
+                                <td>
+                                    <span
+                                        t-field="o.underwriter_id.name" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="padding: 2px; color: white; background-color: #1A2A44;">
+                                    Period
+                                </td>
+                                <td>
+                                    <span
+                                        t-field="o.date_deadline" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="padding: 2px; color: white; background-color: #1A2A44;">Physical
+                                    Location
+                                </td>
+                                <td>
+                                    <span
+                                        t-field="o.company_id.street" />
+                                </td>
+
+                            </tr>
+                        </table>
+                        <br />
+                        <br />
+
+                        <t t-foreach='o.medical_benefit_ids' t-as='medical_benefit'>
+                            <table class="table table-sm o_main_table mt-4">
+                                <t t-if='medical_benefit.benefit_id.benefit_line_ids'>
+                                    <tr>
+                                        <td
+                                            style="padding: 2px; color:white; background-color: #1A2A44;">
+                                            Benefit
+                                        </td>
+                                        <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                            t-as='benefit_line'>
+                                            <td
+                                                style="padding: 2px; color:white; background-color: #1A2A44;">
+                                                <span
+                                                    t-field="benefit_line.benefit" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Limit
+                                        </td>
+                                        <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                            t-as='benefit_line'>
+                                            <td>
+                                                <span
+                                                    t-field="benefit_line.benefit_limit" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Scope
+                                        </td>
+                                        <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                            t-as='benefit_line'>
+                                            <td>
+                                                <span
+                                                    t-field="benefit_line.scope" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Type
+                                        </td>
+                                        <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                            t-as='benefit_line'>
+                                            <td>
+                                                <span
+                                                    t-field="benefit_line.type" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Admin
+                                        </td>
+                                        <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                            t-as='benefit_line'>
+                                            <td>
+                                                <span
+                                                    t-field="benefit_line.admin" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </table>
+                        </t>
+                        <br />
+                        <p>All waiting periods will be waived.</p>
+                        <t t-foreach='o.medical_benefit_ids' t-as='medical_benefit'>
+                            <t t-if='medical_benefit.benefit_id.benefit_line_ids'>
+                                <t t-foreach='medical_benefit.benefit_id.benefit_line_ids'
+                                    t-as='benefit_line'>
+                                    <p t-if='benefit_line.benefit_scope_ids'>
+                                        <u>
+                                            <strong
+                                                t-field="benefit_line.benefit" />
+                                        </u>
+                                    </p>
+                                    <table class="table table-sm o_main_table mt-4">
+                                        <tr t-if='benefit_line.benefit_scope_ids'>
+                                            <td
+                                                style="padding: 2px; color:white; background-color: #1A2A44;">
+                                                Benefits
+                                            </td>
+                                            <td
+                                                style="padding: 2px; color:white; background-color: #1A2A44;">
+                                                Limits
+                                            </td>
+                                            <td
+                                                style="padding: 2px; color:white; background-color: #1A2A44;">
+                                                Scope
+                                            </td>
+                                        </tr>
+                                        <t t-foreach='benefit_line.benefit_scope_ids'
+                                            t-as='benefit_scope'>
+                                            <tr>
+                                                <td>
+                                                    <span
+                                                        t-field="benefit_scope.name" />
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        t-field="benefit_scope.limit" />
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        t-field="benefit_scope.scope" />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if='o.special_exclusion'>
+                            <h5>EXCLUSIONS </h5>
+                            <p>
+                                <span t-field='o.special_exclusion' />
+                            </p>
+                        </t>
+
+                        <t t-if="medical_benefit.benefit_id.rate_table_id">
+                            <h5>
+                                <u>Premium Rates</u>
+                            </h5>
+                            <table class="table table-sm o_main_table mt-4">
+                                <tr>
+                                    <td
+                                        style="padding: 2px; color:white; background-color: #1A2A44;">
+                                        Family Size
+                                    </td>
+                                    <td
+                                        style="padding: 2px; color:white; background-color: #1A2A44;">
+                                        Inpatient
+                                    </td>
+                                    <td
+                                        style="padding: 2px; color:white; background-color: #1A2A44;">
+                                        Outpatient
+                                    </td>
+                                </tr>
+                                <t t-foreach="medical_benefit.benefit_id.rate_table_id.band_ids"
+                                    t-as="band">
+                                    <tr>
+                                        <td>
+                                            <span
+                                                t-field="band.band_label" />
+                                        </td>
+                                        <td>
+                                            <span
+                                                t-field="band.inpatient_premium"
+                                                t-options='{"widget": "integer"}' />
+                                        </td>
+                                        <td>
+                                            <span
+                                                t-field="band.outpatient_premium"
+                                                t-options='{"widget": "integer"}' />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </t>
+                        <div class="oe_structure"></div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="report_medical_benefit" model="ir.actions.report">
+        <field name="name">Medical Benefits</field>
+        <field name="model">crm.lead</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">insurance_management.report_medical_benefits</field>
+        <field name="report_file">insurance_management.report_medical_benefits</field>
+        <field name="attachment" />
+        <field name="print_report_name">'Medical Benefit - %s' % (object.name)</field>
+        <field name="binding_model_id" eval="False" />
+    </record>
+
+
+</odoo>

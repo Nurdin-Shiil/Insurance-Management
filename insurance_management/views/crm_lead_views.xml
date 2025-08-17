@@ -1,0 +1,112 @@
+<odoo>
+    <!-- Inherit the standard partner form -->
+    <record id="insurance_management.crm_lead_views" model="ir.ui.view">
+        <field name="name">crm.lead.form.population</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <!-- <field name="product_id" /> -->
+                <!-- <field name="underwriter_id" /> -->
+            </xpath>
+            <!-- Insert a new tab/page for Insurance settings -->
+            <notebook position="inside">
+                <page string="Insurance">
+                    <group>
+
+                        <field name="rate_table_id" />
+                        <field name="rfq_deadline" />
+                        <field name="risk_note_document" widget="binary"
+                            filename="risk_note_document_filename" />
+                        <field name="risk_note_document_filename" invisible="1" />
+
+                    </group>
+                    <group>
+                        <field name="lead_population_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="band_label" />
+                                <field name="dependent_count" />
+                                <field name="family_count" />
+                                <field name="inpatient_premium" sum="Total Inpatient" />
+                                <field name="outpatient_premium" sum="Total Outpatient" />
+                                <field name="band_total" sum="Total" />
+                            </list>
+                        </field>
+
+                    </group>
+                </page>
+
+                <page name="medical_benefits" string="Medical Benefits">
+                    <group name="medical_benefits" string="Benefits">
+                        <field name="medical_benefit_ids" nolabel="1">
+                            <list editable='bottom'>
+                                <field name="benefit_id" />
+                            </list>
+                        </field>
+                    </group>
+
+                </page>
+            </notebook>
+
+            <xpath expr="//header" position="inside">
+                <field name="policy_id" invisible="1" />
+                <button string="Create Policy" name="action_create_policy" type="object"
+                    class="oe_highlight" invisible="policy_id" />
+                <button string="Medical Benefits" name="action_benefits" type="object"
+                    invisible="not medical_benefit_ids" />
+                <button name="action_generate_risk_note" type="object" string="Generate Risk Note"
+                    class="oe_highlight" />
+
+                <button name="%(insurance_management.action_quote_request_wizard)d"
+                    string="Send Quote Requests" type="action" class="oe_stat_button"
+                    icon="fa-envelope" invisible="not risk_note_document"
+                    groups="insurance_management.group_insurance_user" />
+
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_policy" type="object"
+                    class="oe_stat_button" icon="fa-file" invisible="not policy_id">
+                    <span class="o_stat_text">Policy</span>
+                </button>
+            </xpath>
+
+            <xpath expr="//page[@name='medical_benefits']" position="after">
+                <page string="Quotes" name="quotes">
+                    <field name="quote_ids" widget="one2many" mode="list" open_target="new"
+                        context="{'form_view_ref': 'insurance_management.lead_quote_view_form'}">
+                        <list>
+                            <field name="partner_id" domain="[('is_insurer', '=', True)]" />
+                            <field name="premium_amount" />
+                            <field name="submission_date" />
+                            <field name="state" widget="badge" />
+                            <field name="quote_document_filename" />
+                        </list>
+                        <form>
+                            <group>
+                                <field name="lead_id" invisible="1" />
+                                <field name="partner_id" domain="[('is_insurer', '=', True)]"
+                                    options="{'no_create': True}" />
+                                <field name="state" widget="badge" />
+                            </group>
+                            <group>
+                                <field name="quote_document" widget="binary"
+                                    filename="quote_document_filename" />
+                                <field name="quote_document_filename" invisible="1" />
+                                <field name="premium_amount" />
+                                <field name="coverage_terms" widget="text" />
+                                <field name="submission_date" />
+                            </group>
+                            <group>
+                                <field name="comments" widget="text" />
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,69 @@
+<odoo>
+    <record id="view_insurance_rate_table_list" model="ir.ui.view">
+        <field name="name">insurance.rate.table.list</field>
+        <field name="model">insurance.rate.table</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="insurer_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_insurance_rate_table_form" model="ir.ui.view">
+        <field name="name">insurance.rate.table.form</field>
+        <field name="model">insurance.rate.table</field>
+        <field name="arch" type="xml">
+            <form string="Rate Table">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="insurer_id"/>
+                            <field name="plan_code"/>
+                            <field name="outpatient_limit"/>
+                            <field name="outpatient_limit_type"/>
+                            <field name="outpatient_limit_scope"/>
+                            <field name="outpatient_limit_admin"/>
+                            <field name="outpatient_limit_upgrade_1"/>
+                        </group>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="insurer_id"/>
+                            <field name="plan_code"/>
+
+
+                            <field name="inpatient_limit"/>
+                            <field name="inpatient_limit_type"/>
+                            <field name="inpatient_limit_scope"/>
+                            <field name="inpatient_limit_admin"/>
+
+                            <field name="outpatient_limit_upgrade_2"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bands">
+                            <group>
+                            <field name="band_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="dependent_count"/>
+                                    <field name="band_label"/>
+                                    <field name="inpatient_premium"/>
+                                    <field name="outpatient_premium"/>
+                                </list>
+                            </field>
+                            </group>
+                        </page>
+                    </notebook>
+                    <chatter/>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_insurance_rate_table" model="ir.actions.act_window">
+        <field name="name">Rate Tables</field>
+        <field name="res_model">insurance.rate.table</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

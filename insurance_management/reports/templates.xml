@@ -1,0 +1,237 @@
+<odoo>
+
+
+    <!-- Fixed template for insurance quote -->
+    <template id="quote_report_new">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Insurance Quote</h2>
+                        <h3>Lead Information</h3>
+                        <p>
+                            <strong>Lead:</strong>
+                            <t t-esc="doc.lead_id.name or ''" />
+                        </p>
+                        <p>
+                            <strong>Contact Name:</strong>
+                            <t t-esc="doc.contact_name or ''" />
+                        </p>
+                        <p>
+                            <strong>Email:</strong>
+                            <t t-esc="doc.contact_email or ''" />
+                        </p>
+                        <p>
+                            <strong>Phone:</strong>
+                            <t t-esc="doc.contact_phone or ''" />
+                        </p>
+                        <p>
+                            <strong>Address:</strong>
+                            <t t-esc="doc.contact_address or ''" />
+                        </p>
+
+                        <h3>Insurance Plan Details</h3>
+                        <p>
+                            <strong>Insurer:</strong>
+                            <t t-esc="doc.insurer_id.name or ''" />
+                        </p>
+                        <p>
+                            <strong>Plan Code:</strong>
+                            <t t-esc="doc.plan_code or ''" />
+                        </p>
+                        <p>
+                            <strong>Inpatient Limit:</strong>
+                            <t t-esc="doc.inpatient_limit or 0" />
+                            <t t-esc="doc.currency_id.name or ''" />
+                        </p>
+                        <p>
+                            <strong>Outpatient Limit:</strong>
+                            <t t-esc="doc.outpatient_limit or 0" />
+                            <t t-esc="doc.currency_id.name or ''" />
+                        </p>
+
+                        <h3>Population and Premiums</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Band</th>
+                                    <th>Family Count</th>
+                                    <th>Inpatient Premium</th>
+                                    <th>Outpatient Premium</th>
+                                    <th>Total Premium</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.population_ids or []" t-as="pop">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="pop.band_label or ''" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="pop.family_count or 0" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="pop.inpatient_premium or 0" />
+                                            <t t-esc="pop.currency_id.name or ''" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="pop.outpatient_premium or 0" />
+                                            <t t-esc="pop.currency_id.name or ''" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="pop.band_total or 0" />
+                                            <t t-esc="pop.currency_id.name or ''" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3">Total</th>
+                                    <th>
+                                        <t
+                                            t-esc="sum(pop.inpatient_premium for pop in doc.population_ids or []) or 0" />
+                                        <t t-esc="doc.currency_id.name or ''" />
+                                    </th>
+                                    <th>
+                                        <t
+                                            t-esc="sum(pop.outpatient_premium for pop in doc.population_ids or []) or 0" />
+                                        <t t-esc="doc.currency_id.name or ''" />
+                                    </th>
+                                    <th>
+                                        <t
+                                            t-esc="sum(pop.band_total for pop in doc.population_ids or []) or 0" />
+                                        <t t-esc="doc.currency_id.name or ''" />
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- Template for cr report -->
+
+    <template id="cr_report_pdf_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>CR Report: <t t-esc="doc.name" /></h2>
+                        <p>Policy: <t t-esc="doc.policy_id.name" /></p>
+
+                        <h3>Initially Active Members</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Activation Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.initially_active_ids" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="m.name" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.age" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.activation_date" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <h3>Added After Activation</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Activation Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.added_after_activation_ids" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="m.name" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.age" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.activation_date" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <h3>Deleted Members</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Deletion Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.deleted_ids" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="m.name" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.age" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.deletion_date" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <h3>Currently Active Members</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Activation Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.current_ids" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="m.name" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.age" />
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.activation_date" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+
+            </t>
+        </t>
+
+    </template>
+
+</odoo>

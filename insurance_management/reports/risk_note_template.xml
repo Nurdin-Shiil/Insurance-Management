@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_risk_note_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page"
+                        style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.4;">
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <h2
+                                style="color: #1A2A44; font-size: 20px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid #1A2A44; padding-bottom: 5px;">
+                                Risk Note
+                            </h2>
+                        </div>
+
+                        <!-- Client and Lead Details -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4
+                                    style="color: #1A2A44; font-size: 16px; font-weight: bold; margin-bottom: 10px;">Client
+                                    Details</h4>
+                                <table class="table table-sm o_main_table"
+                                    style="border: 1px solid #dee2e6;">
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold; width: 30%;">
+                                            Name</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.partner_id.name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">ID
+                                            Number</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.partner_id.id_no" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                            Address</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.partner_id.street" /><br />
+                                            <span
+                                                t-field="o.partner_id.city" />, <span
+                                                t-field="o.partner_id.zip" /><br />
+                                            <span
+                                                t-field="o.partner_id.country_id.name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                            Phone</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.partner_id.phone" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                            Email</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.partner_id.email" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h4
+                                    style="color: #1A2A44; font-size: 16px; font-weight: bold; margin-bottom: 10px;">Lead
+                                    Details</h4>
+                                <table class="table table-sm o_main_table"
+                                    style="border: 1px solid #dee2e6;">
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold; width: 30%;">Lead
+                                            ID</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                            Date</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.create_date"
+                                                t-options='{"format": "MM/dd/yyyy"}' />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">BD
+                                            Handler</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.bd_handler_id.name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">RFQ
+                                            Deadline</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.rfq_deadline"
+                                                t-options='{"format": "MM/dd/yyyy"}' />
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.underwriter_id">
+                                        <td
+                                            style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                            Underwriter</td>
+                                        <td style="padding: 4px;">
+                                            <span t-field="o.underwriter_id.name" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Medical Benefits -->
+                        <h4
+                            style="color: #1A2A44; font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #1A2A44; padding-bottom: 5px;">
+                            Medical Benefits Summary
+                        </h4>
+                        <p style="margin-bottom: 15px;">The overall benefit limits are as detailed
+                            below:</p>
+                        <t t-foreach="o.medical_benefit_ids" t-as="benefit">
+                            <h5
+                                style="color: #1A2A44; font-size: 14px; font-weight: bold; margin-top: 15px;">
+                                <span t-field="benefit.benefit_id.name" />
+                            </h5>
+                            <table class="table table-sm o_main_table mt-2"
+                                style="border: 1px solid #dee2e6;">
+                                <tr t-if="benefit.benefit_id.rate_table_id">
+                                    <td
+                                        style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold; width: 20%;">Rate
+                                        Table</td>
+                                    <td style="padding: 4px;">
+                                        <span t-field="benefit.benefit_id.rate_table_id.name" />
+                                    </td>
+                                </tr>
+                                <tr t-if="benefit.benefit_id.special_exclusion">
+                                    <td
+                                        style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                        Exclusions</td>
+                                    <td style="padding: 4px;">
+                                        <span t-field="benefit.benefit_id.special_exclusion"
+                                            t-options='{"widget": "text"}' />
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Benefit Lines -->
+                            <h6
+                                style="color: #1A2A44; font-size: 13px; font-weight: bold; margin-top: 15px;">Benefit
+                                Lines</h6>
+                            <table class="table table-sm o_main_table mt-2"
+                                style="border: 1px solid #dee2e6;">
+                                <thead>
+                                    <tr style="background-color: #1A2A44; color: white;">
+                                        <th style="padding: 4px;">Benefit</th>
+                                        <th style="padding: 4px;">Limit</th>
+                                        <th style="padding: 4px;">Scope</th>
+                                        <th style="padding: 4px;">Type</th>
+                                        <th style="padding: 4px;">Admin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="benefit.benefit_id.benefit_line_ids" t-as="line">
+                                        <tr
+                                            t-att-style="'background-color: %s' % ('#f8f9fa' if line_index % 2 == 0 else '#ffffff')">
+                                            <td style="padding: 4px;">
+                                                <span t-field="line.benefit" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="line.benefit_limit" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="line.scope" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="line.type" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="line.admin" />
+                                            </td>
+                                        </tr>
+                                        <t t-if="line.benefit_scope_ids">
+                                            <tr>
+                                                <td colspan="5" style="padding: 4px;">
+                                                    <strong style="color: #1A2A44;">Scopes:</strong>
+                                                    <table class="table table-sm"
+                                                        style="margin-top: 5px; border: none;">
+                                                        <tr style="background-color: #e9ecef;">
+                                                            <th style="padding: 4px;">Benefit</th>
+                                                            <th style="padding: 4px;">Limit</th>
+                                                            <th style="padding: 4px;">Scope</th>
+                                                        </tr>
+                                                        <t t-foreach="line.benefit_scope_ids"
+                                                            t-as="scope">
+                                                            <tr>
+                                                                <td style="padding: 4px;">
+                                                                    <span t-field="scope.name" />
+                                                                </td>
+                                                                <td style="padding: 4px;">
+                                                                    <span t-field="scope.limit"
+                                                                        t-options='{"widget": "text"}' />
+                                                                </td>
+                                                                <td style="padding: 4px;">
+                                                                    <span t-field="scope.scope" />
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!-- Premium Rates -->
+                            <t
+                                t-if="benefit.benefit_id.rate_table_id and benefit.benefit_id.rate_table_id.band_ids">
+                                <h6
+                                    style="color: #1A2A44; font-size: 13px; font-weight: bold; margin-top: 15px;">Premium
+                                    Rates</h6>
+                                <table class="table table-sm o_main_table mt-2"
+                                    style="border: 1px solid #dee2e6;">
+                                    <thead>
+                                        <tr style="background-color: #1A2A44; color: white;">
+                                            <th style="padding: 4px;">Family Size</th>
+                                            <th style="padding: 4px;">Inpatient</th>
+                                            <th style="padding: 4px;">Outpatient</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="benefit.benefit_id.rate_table_id.band_ids"
+                                            t-as="band">
+                                            <tr
+                                                t-att-style="'background-color: %s' % ('#f8f9fa' if band_index % 2 == 0 else '#ffffff')">
+                                                <td style="padding: 4px;">
+                                                    <span t-field="band.band_label" />
+                                                </td>
+                                                <td style="padding: 4px;">
+                                                    <span t-field="band.inpatient_premium"
+                                                        t-options='{"widget": "integer"}' />
+                                                </td>
+                                                <td style="padding: 4px;">
+                                                    <span t-field="band.outpatient_premium"
+                                                        t-options='{"widget": "integer"}' />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+
+                        <!-- Population Breakdown -->
+                        <t t-if="o.lead_population_ids">
+                            <h4
+                                style="color: #1A2A44; font-size: 16px; font-weight: bold; margin-top: 20px; border-bottom: 1px solid #1A2A44; padding-bottom: 5px;">
+                                Population Breakdown
+                            </h4>
+                            <table class="table table-sm o_main_table mt-2"
+                                style="border: 1px solid #dee2e6;">
+                                <thead>
+                                    <tr style="background-color: #1A2A44; color: white;">
+                                        <th style="padding: 4px;">Band Label</th>
+                                        <th style="padding: 4px;">Dependent Count</th>
+                                        <th style="padding: 4px;">Family Count</th>
+                                        <th style="padding: 4px;">Inpatient Premium</th>
+                                        <th style="padding: 4px;">Outpatient Premium</th>
+                                        <th style="padding: 4px;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.lead_population_ids" t-as="pop">
+                                        <tr
+                                            t-att-style="'background-color: %s' % ('#f8f9fa' if pop_index % 2 == 0 else '#ffffff')">
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.band_label" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.dependent_count" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.family_count" />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.inpatient_premium"
+                                                    t-options='{"widget": "integer"}' />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.outpatient_premium"
+                                                    t-options='{"widget": "integer"}' />
+                                            </td>
+                                            <td style="padding: 4px;">
+                                                <span t-field="pop.band_total"
+                                                    t-options='{"widget": "integer"}' />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Risk Assessment -->
+                        <h4
+                            style="color: #1A2A44; font-size: 16px; font-weight: bold; margin-top: 20px; border-bottom: 1px solid #1A2A44; padding-bottom: 5px;">
+                            Risk Assessment
+                        </h4>
+                        <table class="table table-sm o_main_table mt-2"
+                            style="border: 1px solid #dee2e6;">
+                            <tr>
+                                <td
+                                    style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold; width: 20%;">
+                                    Industry</td>
+                                <td style="padding: 4px;">
+                                    <span
+                                        t-esc="o.partner_id.category_id.mapped('name') or 'Not specified'" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    style="padding: 4px; color: white; background-color: #1A2A44; font-weight: bold;">
+                                    Notes</td>
+                                <td style="padding: 4px;">Standard risk profile based on industry
+                                    and benefit structure.</td>
+                            </tr>
+                        </table>
+
+                        <!-- Additional Notes -->
+                        <p style="margin-top: 15px; font-style: italic;">All waiting periods will be
+                            waived unless otherwise specified.</p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_risk_note" model="ir.actions.report">
+        <field name="name">Risk Note</field>
+        <field name="model">crm.lead</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">insurance_management.report_risk_note_document</field>
+        <field name="report_file">insurance_management.report_risk_note_document</field>
+        <field name="binding_model_id" ref="model_crm_lead" />
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Risk Note - %s' % (object.name)</field>
+    </record>
+</odoo>

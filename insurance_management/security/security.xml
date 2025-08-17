@@ -1,0 +1,5 @@
+<odoo>
+    <record id="group_insurance_user" model="res.groups">
+        <field name="name">Insurance User</field>
+    </record>
+</odoo>

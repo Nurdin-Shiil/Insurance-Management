@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="quote_upload_form" name="Underwriter Quote Upload">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Submit Quote for <t t-esc="lead.name" /></h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5>Lead Details</h5>
+                                <p>
+                                    <strong>Lead ID:</strong>
+                                    <t t-esc="lead.name" />
+                                </p>
+                                <p>
+                                    <strong>Client:</strong>
+                                    <t t-esc="lead.partner_id.name or 'Not specified'" />
+                                </p>
+                                <!-- <p>
+                                    <strong>RFQ Deadline:</strong>
+                                    <t t-if="lead.rfq_deadline">
+                                        <span t-field="lead.rfq_deadline"
+                                            t-options='{"widget": "date", "format": "MM/dd/yyyy"}' />
+                                    </t>
+                                    <t t-else>Not specified</t>
+                                </p> -->
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Underwriter</h5>
+                                <p>
+                                    <strong>Name:</strong>
+                                    <t t-esc="underwriter.name or 'Not specified'" />
+                                </p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    <t t-esc="underwriter.email or 'Not specified'" />
+                                </p>
+                            </div>
+                        </div>
+                        <h5>Medical Benefits</h5>
+                        <div class="accordion" id="benefitsAccordion">
+                            <t t-foreach="lead.medical_benefit_ids" t-as="benefit">
+                                <div class="card mb-2">
+                                    <div class="card-header"
+                                        t-att-id="'benefit' + str(benefit_index)">
+                                        <h6 class="mb-0">
+                                            <a data-bs-toggle="collapse"
+                                                t-att-data-bs-target="'#collapse' + str(benefit_index)">
+                                                <t
+                                                    t-esc="benefit.benefit_id.name or 'Not specified'" />
+                                            </a>
+                                        </h6>
+                                    </div>
+                                    <div t-att-id="'collapse' + str(benefit_index)" class="collapse"
+                                        t-att-data-bs-parent="'#benefitsAccordion'">
+                                        <div class="card-body">
+                                            <p>
+                                                <strong>Rate Table:</strong>
+                                                <t
+                                                    t-esc="benefit.benefit_id.rate_table_id.name or 'Not specified'" />
+                                            </p>
+                                            <!-- <p>
+                                                <strong>Exclusions:</strong>
+                                                <span t-field="benefit.benefit_id.special_exclusion"
+                                                    t-options='{"widget": "text"}'
+                                                    t-if="benefit.benefit_id.special_exclusion" />
+                                            </p> -->
+                                            <h6>Benefit Lines</h6>
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Benefit</th>
+                                                        <th>Limit</th>
+                                                        <th>Scope</th>
+                                                        <th>Type</th>
+                                                        <th>Admin</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t
+                                                        t-foreach="benefit.benefit_id.benefit_line_ids"
+                                                        t-as="line">
+                                                        <tr>
+                                                            <td>
+                                                                <t
+                                                                    t-esc="line.benefit or 'Not specified'" />
+                                                            </td>
+                                                            <td>
+                                                                <t
+                                                                    t-esc="line.benefit_limit or 'Not specified'" />
+                                                            </td>
+                                                            <td>
+                                                                <t
+                                                                    t-esc="line.scope or 'Not specified'" />
+                                                            </td>
+                                                            <td>
+                                                                <t
+                                                                    t-esc="line.type or 'Not specified'" />
+                                                            </td>
+                                                            <td>
+                                                                <t
+                                                                    t-esc="line.admin or 'Not specified'" />
+                                                            </td>
+                                                        </tr>
+                                                        <t t-if="line.benefit_scope_ids">
+                                                            <tr>
+                                                                <td colspan="5">
+                                                                    <!-- <strong>Scopes:</strong>
+                                                                    <ul>
+                                                                        <t
+                                                                            t-foreach="line.benefit_scope_ids"
+                                                                            t-as="scope">
+                                                                            <li>
+                                                                                <t
+                                                                                    t-esc="scope.name or 'Not specified'" />
+                                                                                : <span
+                                                                                    t-field="scope.limit"
+                                                                                    t-if="scope.limit" />
+                                                                                <t
+                                                                                    t-else>Not
+                                                                                specified</t>
+                                                                                (Scope: <t
+                                                                                    t-esc="scope.scope or 'Not specified'" />
+                                                                                ) </li>
+                                                                        </t>
+                                                                    </ul> -->
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                        <form t-att-action="'/innovus/quote/upload/' + token + '/submit'"
+                            method="post" enctype="multipart/form-data" class="mt-4">
+                            <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
+                            <div class="form-group mb-3">
+                                <label for="quote_document" class="form-label">Quote Document (PDF)</label>
+                                <input type="file" name="quote_document" accept="application/pdf"
+                                    required="1" class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="premium_amount" class="form-label">Premium Amount</label>
+                                <input type="number" name="premium_amount" step="0.01"
+                                    class="form-control" required="1"
+                                    placeholder="Enter premium amount" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="coverage_terms" class="form-label">Coverage Terms</label>
+                                <textarea name="coverage_terms" class="form-control" rows="5"
+                                    placeholder="Enter coverage terms"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Quote</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="quote_upload_success" name="Quote Upload Success">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">Quote Submitted Successfully</h4>
+                    <p>Thank you for submitting your quote for <t t-esc="lead.name" />. The BD
+                        handler will review it shortly.</p>
+                    <a href="/" class="btn btn-primary">Return to Home</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="quote_upload_error" name="Quote Upload Error">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="alert alert-danger">
+                    <h4 class="alert-heading">Error</h4>
+                    <p>
+                        <t t-esc="error" />
+                    </p>
+                    <a href="/" class="btn btn-primary">Return to Home</a>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

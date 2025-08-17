@@ -1,0 +1,20 @@
+<odoo>
+    <menuitem id="menu_insurance_root" name="Insurance" sequence="10" />
+    <menuitem id="menu_insurance_rate_table" name="Rate Tables" parent="menu_insurance_root"
+        action="action_insurance_rate_table" />
+    <menuitem id="menu_insurance_policy" name="Policies" parent="menu_insurance_root"
+        action="action_insurance_policy" />
+
+    <!-- <record id="action_insurance_quick_quote" model="ir.actions.act_window">
+        <field name="name">Quick Quote</field>
+        <field name="res_model">insurance.quick.quote</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record> -->
+    <!-- <menuitem id="menu_insurance_quick_quote" name="Quick Quote" parent="menu_insurance_root"
+        action="action_insurance_quick_quote" />
+    <menuitem id="menu_insurance_quote" name="Quote" parent="menu_insurance_root"
+        action="action_insurance_quote" /> -->
+
+
+</odoo>
